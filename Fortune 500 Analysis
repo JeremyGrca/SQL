@@ -57,18 +57,19 @@ VALUES
     ('Company KK', 'Healthcare', 150.2, 3400, 0, 16, 8, 5.3);
 
 
-# Get quickview of data 
+-- Get quickview of data, Select all.
+
 SELECT *
 FROM fortune_companies;
 
-# which industry has avg revenue of $200 billion and what avg revenue
+-- Which industry has an average revenue of $200 billion and what is the  average revenue.
 
 SELECT industry, ROUND(AVG(revenue),1) as avg_rev_billion
 FROM fortune_companies
 GROUP BY industry 
 HAVING avg_rev_billion >= 200;
 
--- which company has over 200k employers and what is avg tenure
+-- Which company has over 200k employers and what is their average tenure.
 
 SELECT company_name, employees
 ,ROUND(AVG(avg_employee_tenure))
@@ -77,15 +78,26 @@ WHERE employees >= 70000
 GROUP BY company_name
 HAVING avg_employee_tenure;
 
--- which tech company has the least revenue
+-- Which Technology company has the least amount of revenue.
 
 SELECT company_name, min(revenue)
 FROM fortune_companies
 WHERE industry = "Technology";
 
---Which company provides healthcare benefits with most amount of pto
+-- Which company provides healthcare benefits with most amount of paid time off.
 
 SELECT company_name, healthcare_benefits, paid_time_off_days
 FROM fortune_companies
 WHERE healthcare_benefits = 1
 AND paid_time_off_days >= 20;
+
+-- Assign all companies in the Energy industry as "Mother Friendly", "Acceptable", or "Abysmal" based on maternity leave offered.
+
+SELECT company_name, maternity_leave_weeks, 
+CASE 
+    WHEN maternity_leave_weeks >= 10 THEN "Mother Friendly"
+    WHEN maternity_leave_weeks >= 8 THEN "Acceptable"
+ELSE "Abysmal"
+END as "mother_friendliness"
+FROM fortune_companies
+WHERE industry = "Energy";
